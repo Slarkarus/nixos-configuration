@@ -16,15 +16,16 @@
             nixpkgs,
             home-manager,
             ...
-        }@inputs;
+        }@inputs:
     let
         system = "x86_64-linux";
         pkgs = import nixpkgs {inherit system; };
-        hostname = "carbon";
+        hostName = "carbon";
     in
     {
-        nixosConfigurations."${hostname}" = nixpkgs.lib.nixosSystem {
+        nixosConfigurations."${hostName}" = nixpkgs.lib.nixosSystem {
             system = system;
+
             specialArgs = {
                 inherit hostName;
                 inherit system;

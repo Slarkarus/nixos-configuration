@@ -9,7 +9,6 @@
     boot.loader.grub.enable = true;
     boot.loader.grub.device = "/dev/sda";
     boot.loader.grub.useOSProber = true;
-    boot.loader.systemd-boot.enable = true;
 
     # Mount a hard disk
     fileSystems."/mnt/mydrive" = {
@@ -49,7 +48,7 @@
     services.desktopManager.plasma6.enable = true;
 
     services.xserver.videoDrivers = [ "nvidia" ];
-    hardware.nvidia.open = false;
+    hardware.nvidia.open = true;
 
     # Configure keymap in X11
     services.xserver.xkb = {
@@ -101,14 +100,6 @@
         curl
     ];
 
-    # Some programs need SUID wrappers, can be configured further or are
-    # started in user sessions.
-    programs.mtr.enable = true;
-    programs.gnupg.agent = {
-        enable = true;
-        enableSSHSupport = true;
-    };
-
     # Enable the OpenSSH daemon.
     services.openssh = {
         enable = true;
@@ -116,7 +107,7 @@
         settings = {
             PasswordAuthentication = true;
             AllowUsers = [ "slarkarus" ];
-            useDns = true;
+            UseDns = true;
             PermitRootLogin = "prohibit-password"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
         };
     };
