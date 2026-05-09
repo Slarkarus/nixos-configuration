@@ -92,10 +92,14 @@
             vlc
             vscode
             v2raya
+            telegram-desktop
         ];
     };
 
-    services.v2raya.enable = true;
+    services.v2raya = {
+        enable = true;
+        cliPackage = pkgs.xray; 
+    };
 
     programs.firefox.enable = true;
 
