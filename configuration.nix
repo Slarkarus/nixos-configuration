@@ -47,8 +47,14 @@
     services.displayManager.sddm.enable = true;
     services.desktopManager.plasma6.enable = true;
 
-    services.xserver.videoDrivers = [ "nvidia" ];
-    hardware.nvidia.open = true;
+    services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
+    hardware.nvidia = {
+        open = false;
+        powerManagement.enable = false;
+
+        modesetting.enable = true;
+        package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
+    };
 
     # Configure keymap in X11
     services.xserver.xkb = {
@@ -85,8 +91,11 @@
             thunderbird
             vlc
             vscode
+            v2raya
         ];
     };
+
+    services.v2raya.enable = true;
 
     programs.firefox.enable = true;
 
@@ -112,8 +121,9 @@
         };
     };
 
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
     programs.ssh.startAgent = true;
 
     system.stateVersion = "25.05"; 
-
 }
