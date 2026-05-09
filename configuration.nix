@@ -1,0 +1,128 @@
+{ config, pkgs, ... }:
+
+{
+    imports =
+        [
+        ./hardware-configuration.nix
+    ];
+
+    boot.loader.grub.enable = true;
+    boot.loader.grub.device = "/dev/sda";
+    boot.loader.grub.useOSProber = true;
+    boot.loader.systemd-boot.enable = true;
+
+    # Mount a hard disk
+    fileSystems."/mnt/mydrive" = {
+        device = "/dev/disk/by-uuid/1274A7D374A7B83D";
+        fsType = "ntfs";
+        options = [ "defaults" "nofail" ]; # 'nofail' prevents boot issues
+    };
+
+    networking.hostName = "carbon"; # Define your hostname.
+
+    networking.networkmanager.enable = true;
+
+    # Set your time zone.
+    time.timeZone = "Europe/Moscow";
+
+    # Select internationalisation properties.
+    i18n.defaultLocale = "en_US.UTF-8";
+
+    i18n.extraLocaleSettings = {
+        LC_ADDRESS = "ru_RU.UTF-8";
+        LC_IDENTIFICATION = "ru_RU.UTF-8";
+        LC_MEASUREMENT = "ru_RU.UTF-8";
+        LC_MONETARY = "ru_RU.UTF-8";
+        LC_NAME = "ru_RU.UTF-8";
+        LC_NUMERIC = "ru_RU.UTF-8";
+        LC_PAPER = "ru_RU.UTF-8";
+        LC_TELEPHONE = "ru_RU.UTF-8";
+        LC_TIME = "ru_RU.UTF-8";
+    };
+
+    # Enable the X11 windowing system.
+    # You can disable this if you're only using the Wayland session.
+    services.xserver.enable = true;
+
+    # Enable the KDE Plasma Desktop Environment.
+    services.displayManager.sddm.enable = true;
+    services.desktopManager.plasma6.enable = true;
+
+    services.xserver.videoDrivers = [ "nvidia" ];
+    hardware.nvidia.open = false;
+
+    # Configure keymap in X11
+    services.xserver.xkb = {
+        layout = "us";
+        variant = "";
+    };
+
+    # Enable CUPS to print documents.
+    services.printing.enable = true;
+
+    # Add working with .envrc files
+    programs.direnv.enable = true;
+
+    programs.nix-ld.enable = true;
+
+    # Enable sound with pipewire.
+    services.pulseaudio.enable = false;
+    security.rtkit.enable = true;
+    services.pipewire = {
+        enable = true;
+        alsa.enable = true;
+        alsa.support32Bit = true;
+        pulse.enable = true;
+
+        jack.enable = true;
+    };
+
+    # Define a user account. Don't forget to set a password with ‘passwd’.
+    users.users.slarkarus = {
+        isNormalUser = true;
+        description = "slarkarus";
+        extraGroups = [ "networkmanager" "wheel" ];
+        packages = with pkgs; [
+            thunderbird
+            vlc
+            vscode
+        ];
+    };
+
+    programs.firefox.enable = true;
+
+    nixpkgs.config.allowUnfree = true;
+
+    # List packages installed in system profile. To search, run:
+    # $ nix search wget
+    environment.systemPackages = with pkgs; [
+        gitFull
+        wget
+        curl
+    ];
+
+    # Some programs need SUID wrappers, can be configured further or are
+    # started in user sessions.
+    programs.mtr.enable = true;
+    programs.gnupg.agent = {
+        enable = true;
+        enableSSHSupport = true;
+    };
+
+    # Enable the OpenSSH daemon.
+    services.openssh = {
+        enable = true;
+        ports = [ 22 ];
+        settings = {
+            PasswordAuthentication = true;
+            AllowUsers = [ "slarkarus" ];
+            useDns = true;
+            PermitRootLogin = "prohibit-password"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
+        };
+    };
+
+    programs.ssh.startAgent = true;
+
+    system.stateVersion = "25.05"; 
+
+}
