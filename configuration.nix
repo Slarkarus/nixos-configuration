@@ -93,6 +93,7 @@
             vscode
             v2raya
             telegram-desktop
+            zoom-us
         ];
     };
 
