@@ -95,6 +95,10 @@
             telegram-desktop
             zoom-us
             discord
+            code-cursor
+            
+            openvpn
+            networkmanager-openvpn
         ];
     };
 
