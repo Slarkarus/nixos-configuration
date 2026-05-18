@@ -63,7 +63,19 @@
     };
 
     # Enable CUPS to print documents.
-    services.printing.enable = true;
+    services.avahi = {
+        enable = true;
+        nssmdns4 = true;
+        openFirewall = true;
+    };
+
+    services.printing = {
+        enable = true;
+        drivers = with pkgs; [
+            cups-filters
+            cups-browsed
+        ];
+    };
 
     # Add working with .envrc files
     programs.direnv.enable = true;
@@ -78,8 +90,8 @@
         alsa.enable = true;
         alsa.support32Bit = true;
         pulse.enable = true;
-
         jack.enable = true;
+        wireplumber.enable = true;
     };
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -99,6 +111,10 @@
             
             openvpn
             networkmanager-openvpn
+
+            pavucontrol
+            alsa-utils
+            appimage-run
         ];
     };
 
