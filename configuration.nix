@@ -19,7 +19,22 @@
 
     networking.hostName = "carbon"; # Define your hostname.
 
-    networking.networkmanager.enable = true;
+    networking = {
+        networkmanager = {
+            enable = true;
+            plugins = [ pkgs.networkmanager-openvpn ];
+        };
+        
+        firewall = {
+            allowedTCPPorts = [
+                443
+                3389
+                5900
+                21027
+                22000
+            ];
+        };
+    };
 
     # Set your time zone.
     time.timeZone = "Europe/Moscow";
@@ -114,7 +129,7 @@
 
             pavucontrol
             alsa-utils
-            appimage-run
+            jetbrains.idea-oss
         ];
     };
 
