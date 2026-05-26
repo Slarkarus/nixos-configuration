@@ -123,6 +123,7 @@
             zoom-us
             discord
             code-cursor
+            libreoffice
             
             openvpn
             networkmanager-openvpn
